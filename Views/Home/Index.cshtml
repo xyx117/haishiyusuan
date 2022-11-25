@@ -1,0 +1,372 @@
+﻿@model IEnumerable<yusuanxiangmu.Models.xiangmuzongbiao>
+
+@{
+    ViewBag.Title = "Index";
+}
+<div style="padding-bottom:5px">
+    当前位置：| &gt;项目查询
+    <br />
+
+</div>
+@using (Html.BeginForm("index", "Home", FormMethod.Get, new { id = "TheForm" }))
+{
+    <table class="table table-striped table-hover form-group">
+        <tr>
+            <td class="col-lg-1">
+                <button type="button" class="btn btn-primary" onclick="window.location.href = '@Url.Action("Create", "Home")'">增加项目</button>
+            </td>
+            <td class="col-lg-1"></td>
+
+            <td class="col-lg-1" align="right"><button type="button" class="btn" style="background:none"><span style="font-size:medium">年度</span></button></td>
+            <td class="col-lg-1" align="left">
+                <select name="niandu" class="form-control" style="width:auto;height:auto;" onchange="document.getElementById('TheForm').submit()">
+                    @{ int chushinian = int.Parse(DateTime.Now.ToString("yyyy"));}
+                    @for (int i = -5; i < 6; i++)
+                    {
+                        if (chushinian + i == ViewBag.nianduzhi)      //在i= 0 的时候，初始年为今年
+                        {
+                            <option value=@(chushinian+i) selected="selected">@(chushinian + i)</option>;
+                        }
+                        else
+                        {
+                            <option value=@(chushinian+i)>@(chushinian + i)</option>;
+                        }
+                    }
+                </select>
+            </td>
+
+            <td class="col-lg-1" align="right"><button type="button" class="btn" style="background:none"><span style="font-size:medium">审核状态</span></button></td>
+
+            <td class="col-lg-1" align="left">
+                <select name="shenhejieguo" class="form-control" style="width:auto;height:auto;" onchange="document.getElementById('TheForm').submit()">
+                    @{ string shh = ViewBag.shenhejieguozhi;}
+                    @switch (shh)
+                    {
+                        case "通过":
+                            {
+                                <option value="全部">全部</option>;
+                                <option value="通过" selected="selected">通过</option>;
+                                <option value="未通过">未通过</option>;
+                                <option value="未审核">未审核</option>;
+                                break;
+                            }
+
+                        case "未通过":
+                            {
+                                <option value="全部">全部</option>;
+                                <option value="通过"> 通过</option>;
+                                <option value="未通过" selected="selected">未通过</option>;
+                                <option value="未审核">未审核</option>;
+                                break;
+                            }
+                        case "未审核":
+                            {
+                                <option value="全部">全部</option>;
+                                <option value="通过"> 通过</option>;
+                                <option value="未通过">未通过</option>;
+                                <option value="未审核" selected="selected">未审核</option>;
+                                break;
+                            }
+                        default:
+                            {
+                                <option value="全部" selected="selected">全部</option>;
+                                <option value="通过">通过</option>;
+                                <option value="未通过">未通过</option>;
+                                <option value="未审核">未审核</option>;
+                                break;
+                            }
+                    }
+                </select>
+            </td>
+            <td class="col-lg-1"></td>
+            <td nowrap class="col-lg-2">
+                @if (ViewBag.searchzhi == null)
+                {
+                    @Html.TextBox("searchString", "", new { placeholder = "可输入项目名称或项目号进行查询", style = "width:450px", @class = "form-control" })
+                }
+                else
+                {
+                    @Html.TextBox("searchString", "", new { placeholder = ViewBag.searchzhi, style = "width:450px", @class = "form-control" })
+                }
+
+            </td>
+            <td nowrap class="col-lg-1">
+                <button type="submit" class="btn btn-default"><span style="font-size:small">搜索 »</span></button>
+            </td>
+            <td class="col-lg-2"></td>
+        </tr>
+    </table>
+}
+
+<table class="table table-striped table-hover" id="test">
+    <thead>
+        <tr style="background-color:#e0cc5f">
+            <th nowrap>
+                序号
+            </th>
+
+            <th nowrap>
+                @Html.ActionLink("项目类别", "Index", new { sortOrder = ViewBag.xiangmuleibie, searchstring = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })
+                @*@Html.DisplayNameFor(model => model.zhixingdanwei)*@
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.mingcheng)
+                @*@Html.ActionLink("项目名称", "Index", new { sortOrder = ViewBag.DateSortParm })*@
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.shangcaixiangmuhao)
+                @*@Html.ActionLink("项目名称", "Index", new { sortOrder = ViewBag.DateSortParm })*@
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.lierulanmu)
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.bianhao)                  @*这是对内部的编号*@
+            </th>
+
+            <th nowrap>
+                @*@Html.ActionLink("执行单位", "Index", new { sortOrder = ViewBag.zhixingdanwei})*@
+                @Html.DisplayNameFor(model => model.zhixingdanwei)
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.lianxiren)
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.jine)
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.xiangmufenlei)           @*这里是漏掉新加的*@
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.zijinlaiyuan)
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.xiangmulaiyuan)          @*这是对外部的编号*@
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.zijinxingzhi)
+            </th>
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.xiabobumen)
+            </th>
+            <th nowrap>
+                @*@Html.DisplayNameFor(model => model.xiadariqi)*@
+                @Html.ActionLink("下达日期", "Index", new { sortOrder = ViewBag.xiadariqi, searchstring = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.shenhezhuangtai)
+            </th>
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.beizhu)
+            </th>
+            <th nowrap></th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @{ var hangyanse = "";
+            int hao = 1;}
+        @foreach (var item in Model)
+        {
+            switch (item.shenhezhuangtai)
+            {
+                case "未审核":
+                    hangyanse = "warning";
+                    break;
+                case "未通过":
+                    hangyanse = "danger";
+                    break;
+                default: //已通过
+                    hangyanse = "";
+                    break;
+            }
+
+            <tr class="@hangyanse">
+                <td>
+                    @hao
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.xiangmuleibie)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.mingcheng)
+                </td>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.shangcaixiangmuhao)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.lierulanmu)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.bianhao)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.zhixingdanwei)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.lianxiren)
+                </td>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.jine)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.xiangmufenlei)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.zijinlaiyuan)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.xiangmulaiyuan)
+                </td>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.zijinxingzhi)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.xiabobumen)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.xiadariqi)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.shenhezhuangtai)
+                </td>
+
+                <td style="word-break: break-all; max-width:200px;">
+                    <a onclick="return click_a('@item.ID')" style="cursor:pointer;"><span id="bz_icon" class="glyphicon  glyphicon-th-large" style="font-size: 20px; text-shadow: none;"></span></a>
+
+                    <div id="@item.ID" style="display:none;">@Html.DisplayFor(modelItem => item.beizhu)</div>
+                </td>
+
+                @switch (@hangyanse)
+                {
+                    case "warning": //未审核
+                        <td nowrap>
+                            @if (@User.IsInRole("处长") == true)
+                            {
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Details", "Home", new { id = item.ID, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">查 看</button>                              
+                            }
+
+                            @if (@User.IsInRole("科长") == true)
+                            {
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Details", "Home", new { id = item.ID, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">查 看</button>                                
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("shenhe", "Home", new { id = item.ID,sortOrder= @ViewBag.sortOrderzhi , searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">审核</button>
+                            }
+
+                            @if (@User.IsInRole("工作人员") == true)
+                            {
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Details", "Home", new { id = item.ID, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">查 看</button>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Edit", "Home", new { id = item.ID, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">修 改</button>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Delete", "Home", new { id = item.ID, shenhezhuangtai = item.shenhezhuangtai, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">删除</button> @*在这里新加入的参数*@
+                            }
+
+                        </td>
+                        break;
+                    case "danger":  //未通过
+
+                        <td nowrap>
+                            @if (@User.IsInRole("处长") == true)
+                            {
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Details", "Home", new { id = item.ID, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">查 看</button>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Delete", "Home", new { id = item.ID, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">删除</button>
+                            }
+
+                            @if (@User.IsInRole("科长") == true)
+                            {
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Details", "Home", new { id = item.ID, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">查 看</button>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("shenhe", "Home", new { id = item.ID, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">审核</button>
+                            }
+
+                            @if (@User.IsInRole("工作人员") == true)
+                            {
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Details", "Home", new { id = item.ID, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">查 看</button>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Edit", "Home", new { id = item.ID, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">修 改</button>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Delete", "Home", new { id = item.ID, shenhezhuangtai = item.shenhezhuangtai, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">删除</button>
+                            }
+
+                        </td>
+                        break;
+                    default: //已通过
+                        <td nowrap>
+                            @if (@User.IsInRole("处长") == true)
+                            {
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Details", "Home", new { id = item.ID, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">查 看</button>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Delete", "Home", new { id = item.ID, shenhezhuangtai = item.shenhezhuangtai, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">删除</button>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("chehui", "Home", new { id = item.ID, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">撤回</button>
+                            }
+
+                            @if (@User.IsInRole("科长") == true)
+                            {
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Details", "Home", new { id = item.ID, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">查 看</button>                                
+                            }
+
+                            @if (@User.IsInRole("工作人员") == true)
+                            {
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Details", "Home", new { id = item.ID, sortOrder = @ViewBag.sortOrderzhi, searchString = @ViewBag.searchzhi, shenhejieguo = @ViewBag.shenhejieguozhi, niandu = @ViewBag.nianduzhi })'">查 看</button>                               
+                            }
+
+                        </td>
+                        break;
+                }
+            </tr>
+
+            hao = hao + 1;
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+@*为了解决标题浮动的*@
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.floatThead.js"></script>
+<script src="~/Scripts/underscore-min.js"></script>
+
+<script type="text/javascript">
+    $("#test").floatThead()
+</script>
+
+
+@*为了解决备注单击显示与不显示的切换*@
+
+<script language="javascript" type="text/javascript">
+
+    function click_a(divDisplay) {
+        if (document.getElementById(divDisplay).style.display != "block") {
+            document.getElementById(divDisplay).style.display = "block";
+
+        }
+        else {
+            document.getElementById(divDisplay).style.display = "none";
+        }
+    }
+
+</script>

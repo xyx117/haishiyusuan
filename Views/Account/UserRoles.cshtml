@@ -1,0 +1,48 @@
+﻿@model yusuanxiangmu.Models.SelectUserRolesViewModel
+@{
+    ViewBag.Title = "使用者角色";
+}
+
+<div style="padding-bottom:5px">
+    当前位置：| &gt;参数设置  &gt; 用户管理 &gt; 设置用户角色
+    <br />
+</div>
+<hr />
+
+@using (Html.BeginForm("UserRoles", "Account", FormMethod.Post, new { encType = "multipart/form-data", name = "myform" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.HiddenFor(model => model.UserName)
+            </div>
+        </div>
+        <br />
+        <hr />
+
+        <table>
+            <tr>
+                <th>
+                    勾选
+                </th>
+                <th>
+                    角色
+                </th>
+            </tr>      
+            @Html.EditorFor(model => model.Roles)
+        </table>
+        <br />
+        <hr />
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="保存" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+

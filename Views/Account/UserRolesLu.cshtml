@@ -1,0 +1,75 @@
+﻿@model yusuanxiangmu.Models.SelectUserRolesViewModel
+@{
+    ViewBag.Title = "使用者角色";
+}
+<div style="padding-bottom:5px">
+    当前位置：| &gt;参数设置  &gt; 用户管理 &gt; 设置用户角色
+    <br />
+</div>
+<hr />
+@using (Html.BeginForm("UserRolesLu", "Account", FormMethod.Post, new { encType = "multipart/form-data", name = "myform" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.HiddenFor(model => model.UserName)
+            </div>
+        </div>
+        <br />
+        <hr />
+        <table>
+            <tr>
+                <th>
+                    勾选
+                </th>
+                <th>
+                    角色
+                </th>
+            </tr>
+
+            @foreach (var item in Model.Roles)
+            {
+                <tr>
+                    <td>
+                        @if (@item.RoleName != "Admin")
+                        {
+                            if (@item.Selected == true)
+                            {
+                                <input type="radio" name="roleselected" value=@item.RoleName checked> @item.RoleName
+                            }
+                            else
+                            {
+                                <input type="radio" name="roleselected" value=@item.RoleName> @item.RoleName
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+
+        <br />
+        <hr />
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="reset" value="重置" class="btn btn-default" />
+                <input type="button" value="清空" class="btn btn-default" onclick="cancel()" />
+                <input type="submit" value="保存" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<script language="JavaScript">
+    function cancel() {
+        var input = document.getElementsByName("roleselected");
+
+        for (var i = 0; i < input.length; i++) {
+            if (input[i].checked)
+                input[i].checked = false;
+        }
+    }
+</script>

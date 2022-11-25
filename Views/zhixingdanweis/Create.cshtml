@@ -1,0 +1,51 @@
+﻿@model yusuanxiangmu.Models.zhixingdanwei
+@{
+    ViewBag.Title = "添加执行单位";
+}
+<div style="padding-bottom:5px">
+    当前位置：| &gt;参数设置  &gt; 执行单位设置 &gt;添加执行单位
+    <br />
+</div>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">        
+        @*<h4>添加执行单位</h4>*@
+        <div class="form-group">
+            <div class="col-md-5"></div>
+            <div class="col-md-2">
+                <h3>添加执行单位</h3>
+            </div>
+            <div class="col-md-5"></div>
+        </div>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <div class="col-md-1"></div>
+            @Html.LabelFor(model => model.mingcheng, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.mingcheng, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.mingcheng, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-5"></div>
+        </div> 
+
+        <div class="form-group">
+            <div class="col-md-3"></div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary">创 建</button>
+                <span>&nbsp;&nbsp;</span>
+                <button type="button" class="btn btn-primary" onclick="window.location.href = '@Url.Action("Index", "Home")'">返 回</button>
+            </div>
+            <div class="col-md-5"></div>
+        </div>
+
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

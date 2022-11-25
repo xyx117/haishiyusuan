@@ -1,0 +1,50 @@
+﻿@model IEnumerable<yusuanxiangmu.Models.zhixingdanwei>
+
+@{
+    ViewBag.Title = "执行单位设置";
+}
+
+<div style="padding-bottom:5px">
+    当前位置：| &gt;参数设置  &gt; 执行单位设置
+    <br />
+</div>
+<hr />
+
+<p>
+    <button type="button" class="btn btn-primary" onclick="window.location.href = '@Url.Action("Create", "zhixingdanweis")'">创建新的执行单位</button>
+</p>
+
+<table class="table table-striped table-hover form-group">
+    <tr>
+        <th class="col-lg-3">
+        </th>
+        <th nowrap class="col-lg-3">
+            序号
+        </th>
+        <th nowrap class="col-lg-3">
+            单位名称
+        </th>
+        <th class="col-lg-3">
+
+        </th>
+    </tr>
+    @{int hao = 0;}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="col-lg-3"></td>
+            <td class="col-lg-3">
+                @{ hao = hao + 1;
+                    @hao; }
+            </td>
+            <td class="col-lg-3">
+                @Html.DisplayFor(modelItem => item.mingcheng)
+            </td>
+
+            <td class="col-lg-3">
+                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("Delete", "zhixingdanweis", new { id = item.mingcheng })'">删除</button>
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,284 @@
+﻿@model IEnumerable<yusuanxiangmu.Models.shouruzongbiao>
+
+@{
+    ViewBag.Title = "shouruhuizong";
+}
+
+<div style="padding-bottom:5px">
+    当前位置：| &gt;项目汇总  &gt; 收入明细表
+    <br />
+</div>
+<table class="table table-striped table-hover form-group">
+    <tr>
+        <td class="col-lg-1"></td>
+        <td class="col-lg-1"><button type="button" class="btn" style="background:none"><div style="font-size:medium">年&nbsp;&nbsp;&nbsp;&nbsp;度</div></button></td>
+        @using (Html.BeginForm("docshouruv", "Home", FormMethod.Get, new { id = "TheForm" }))
+        {
+            <td class="col-lg-2">
+                <select name="niandu" id="niandu" class="form-control" style="width:auto;height:auto;" onchange="document.getElementById('TheForm').submit()">
+                    @{ int chushinian = int.Parse(DateTime.Now.ToString("yyyy"));}
+                    @for (int i = -5; i < 6; i++)
+                    {
+                        if (chushinian + i == ViewBag.nianduzhi)      //在i= 0 的时候，初始年为今年,之前是 if (i==0)
+                        {
+                            <option value=@(chushinian+i) selected="selected">@(chushinian + i)</option>;
+                        }
+                        else
+                        {
+                            <option value=@(chushinian+i)>@(chushinian + i)</option>;
+                        }
+                    }
+                </select>
+            </td>
+
+            <td class="col-lg-1"></td>
+
+            <td class="col-lg-1"><button type="button" class="btn" style="background:none"><span style="font-size:medium">项目类别</span></button></td>
+            <td class="col-lg-2">
+                <select name="xmleibie" id="xmleibie" class="form-control" style="width:auto;height:auto;" onchange="document.getElementById('TheForm').submit()">
+                    @{ string leibie = ViewBag.leibie;}
+                    @switch (leibie)
+                    {
+                        case "教学":
+                            {
+                                <option value="全部">全部</option>;
+                                <option value="教学" selected="selected">教学</option>;
+                                <option value="科研">科研</option>;
+                                <option value="行政">行政</option>;
+                                <option value="后勤">后勤</option>;
+                                <option value="离退休">离退休</option>;
+                                break;
+                            }
+
+                        case "科研":
+                            {
+                                <option value="全部">全部</option>;
+                                <option value="教学">教学</option>;
+                                <option value="科研" selected="selected">科研</option>;
+                                <option value="行政">行政</option>;
+                                <option value="后勤">后勤</option>;
+                                <option value="离退休">离退休</option>;
+                                break;
+                            }
+                        case "行政":
+                            {
+                                <option value="全部">全部</option>;
+                                <option value="教学">教学</option>;
+                                <option value="科研">科研</option>;
+                                <option value="行政" selected="selected">行政</option>;
+                                <option value="后勤">后勤</option>;
+                                <option value="离退休">离退休</option>;
+                                break;
+                            }
+                        case "后勤":
+                            {
+                                <option value="全部">全部</option>;
+                                <option value="教学">教学</option>;
+                                <option value="科研">科研</option>;
+                                <option value="行政">行政</option>;
+                                <option value="后勤" selected="selected">后勤</option>;
+                                <option value="离退休">离退休</option>;
+                                break;
+                            }
+                        case "离退休":
+                            {
+                                <option value="全部">全部</option>;
+                                <option value="教学">教学</option>;
+                                <option value="科研">科研</option>;
+                                <option value="行政">行政</option>;
+                                <option value="后勤">后勤</option>;
+                                <option value="离退休" selected="selected">离退休</option>;
+                                break;
+                            }
+
+                        default:
+                            {
+                                <option value="全部" selected="selected">全部</option>;
+                                <option value="教学">教学</option>;
+                                <option value="科研">科研</option>;
+                                <option value="行政">行政</option>;
+                                <option value="后勤">后勤</option>;
+                                <option value="离退休">离退休</option>;
+                                break;
+                            }
+                    }
+                </select>
+            </td>
+        }
+
+        <td class="col-lg-2"></td>
+
+        <td class="col-lg-1"><button type="submit" class="btn btn-primary btn-default" onclick="window.location.href = '@Url.Action("docshouru", "Home", new { xmleibie = ViewBag.leibie, niandu = ViewBag.nianduzhi })'">批量导出word</button></td>
+
+        <td class="col-lg-1"></td>
+    </tr>
+</table>
+
+<table class="table table-striped table-hover" id="test">
+    <thead>
+        <tr style="background-color:#e0cc5f">
+            <th nowrap>
+                序号
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.mingcheng)
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.jine)
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.xiangmufenlei)
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.zijinlaiyuan)
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.zijinxingzhi)
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.zhixingdanwei)
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.xiabobumen)
+            </th>
+
+            <th nowrap>
+                @Html.DisplayNameFor(model => model.xiadariqi)
+            </th>
+            <th nowrap>
+            </th>
+        </tr>
+    </thead>
+
+
+    <tbody id="abnormalListBody">
+
+        @{
+
+            string[] fenlei = { "教学", "科研", "行政", "后勤", "离退休" };
+            string[] laiyuan = { "网上指标", "基本户", "校内追加" };
+            string[] fenleixuhao = { "1.", "2.", "3.", "4.", "5." };
+            string[] laiyuanxuhao = { "1.", "2.", "3." };
+            Decimal sum_jine = 0;
+            int hao = 0;
+            string temp_str; }
+
+        @for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                hao = 1;
+                foreach (var item in Model)
+                {
+                    if (item.xiangmuleibie == fenlei[i] && item.zijinlaiyuan == laiyuan[j])
+                    {
+                        <tr>
+                            <td>
+                                @{ temp_str = fenleixuhao[i] + laiyuanxuhao[j] + hao.ToString();
+                                    @temp_str;
+                                }
+
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.mingcheng)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.jine)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.xiangmufenlei)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.zijinlaiyuan)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.zijinxingzhi)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.zhixingdanwei)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.xiabobumen)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.xiadariqi)
+                            </td>
+
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location.href = '@Url.Action("docshouru_danxiang", "Home", new { id = item.ID })'">导 出</button>
+                            </td>
+                        </tr>
+                        sum_jine = sum_jine + item.jine;
+                        hao = hao + 1;
+                    }
+
+                }
+
+            }
+
+        }
+
+
+    </tbody>
+</table>
+<div style="height:20px">
+
+</div>
+<table class="table table-striped">
+    <tr>
+        <th>
+        </th>
+
+        <th>
+        </th>
+
+        <th>
+        </th>
+
+        <th>
+        </th>
+
+        <th>
+        </th>
+
+        <th>
+        </th>
+
+        <th>
+            合计： @sum_jine.ToString()
+        </th>
+        <th>
+
+        </th>
+        <th>
+
+        </th>
+        <th>
+
+        </th>
+    </tr>
+</table>
+
+
+
+@*为了解决标题浮动的*@
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.floatThead.js"></script>
+<script src="~/Scripts/underscore-min.js"></script>
+
+<script type="text/javascript">
+    $("#test").floatThead()
+</script>

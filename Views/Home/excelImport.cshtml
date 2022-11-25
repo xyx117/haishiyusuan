@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "批量导入";
+}
+
+<div style="padding-bottom:5px">
+    当前位置：| &gt;项目录入  &gt; 信息批量录入
+    <br />
+</div>
+
+<hr />
+
+<div>
+    <fieldset id="myfieldset">
+        <legend>批量信息导入</legend>
+        <p style="text-align: center;"><img src="~/Content/Image/download.png" style="width:30px;height:30px;vertical-align:middle;" />导入的模板格式如下，若模板格式不正确，则相应的名单不能导入:</p>
+        <p style="color: Red; text-align: center;">
+            @Html.ActionLink("下载模版", "GetFile")
+        </p>
+    </fieldset>
+</div>
+
+<hr />
+<div class="row">
+    @using (Html.BeginForm("excelImport", "home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-group">
+            <div class="col-md-3"></div>
+            <div class="col-md-1">选择文件：</div>
+            <div class="col-md-6">
+                <input id="FileUpload" type="file" name="files" class="btn btn-primary btn-default" />
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+        <div class="form-group">
+            <br />
+            <br />
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3"></div>
+            <div class="col-md-1">更新模式：</div>
+            <div class="col-md-6">
+                <select id="gengxinmoshi" name="gengxinmoshi" class="form-control" style="width:150px;">
+                    <option value="zhuijia">追加</option>
+                    <option value="fugai">覆盖</option>
+                </select>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+        <div class="form-group">
+            <br />
+            <br />
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3"></div>
+            <div class="col-md-1"></div>
+            <div class="col-md-6">
+                <input id="btnImport" type="submit" value="导入" class="btn btn-primary btn-default" />
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3"></div>
+            <div class="col-md-1"></div>
+            <div class="col-md-6">
+                <p style="color: Red; text-align: center;">@ViewBag.error</p>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    }
+</div>
